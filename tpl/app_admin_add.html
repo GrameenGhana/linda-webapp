@@ -1,0 +1,263 @@
+<div ng-controller="AdminAddCtrl">
+
+  <!-- header -->
+  <div class="wrapper bg-light lter b-b">
+    <div class="btn-group m-r-sm">
+        <a ui-sref="app.admin.view" id="back_button" class="btn btn-sm btn-default w-xxs m-r-sm" tooltip="Back">
+            <i class="fa fa-long-arrow-left"></i>
+        </a>
+        <h1 class="m-n font-thin h3 inline">Add {{ item }}</h1>
+    </div>
+  </div>
+  <!-- / header -->
+
+  <div class="wrapper" ng-show="isItem('Hospitals')" ng-show="error">
+    <div class="text-danger wrapper text-center">
+            {{ err_msg }}
+    </div>
+  </div>
+
+  <div class="wrapper" ng-show="isItem('Hospitals')">
+    <form name="newHospital" class="form-horizontal m-t-lg"  ng-submit="addHospital()">
+
+      <div class="form-group">
+        <label class="col-lg-2 control-label">Type:</label>
+        <div class="col-lg-8">
+                <select class="form-control" data-placeholder="Choose hospital type" name="htype" id="type" ng-model="hospital.type">
+                    <option value="Public">Public</option>
+                    <option value="Private">Private</option>
+                </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-lg-2 control-label">Region:</label>
+        <div class="col-lg-8">
+                <select class="form-control" name="regions" id="hregion"
+                        data-placeholder="Choose region"
+                        ng-options="r.region for r in regions"
+                        ng-model="hospital.location" required>
+                 </select>
+        </div>
+      </div>
+        
+      <div class="form-group">
+        <label class="col-lg-2 control-label">Name:</label>
+        <div class="col-lg-8">
+          <input type="text" class="form-control" ng-model="hospital.name" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-lg-2 control-label">Phone:</label>
+        <div class="col-lg-8">
+          <input type="text" class="form-control" ng-model="hospital.phone">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-lg-2 control-label">Latitude:</label>
+        <div class="col-lg-8">
+          <input type="text" class="form-control" ng-model="hospital.lat">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-lg-2 control-label">Longitude:</label>
+        <div class="col-lg-8">
+          <input type="text" class="form-control" ng-model="hospital.long">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-lg-8 col-lg-offset-2">
+          <button type="submit" class="btn btn-info w-xs" ng-disabled="newHospital.$invalid" >Add</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="wrapper" ng-show="isItem('Wards')">
+    <form name="newWard" class="form-horizontal m-t-lg"  ng-submit="addWard()">
+
+      <div class="form-group">
+        <label class="col-lg-2 control-label">Type:</label>
+        <div class="col-lg-8">
+                <select class="form-control" data-placeholder="Choose ward type" name="wtype" id="type" ng-model="ward.type">
+                    <option value="General">General</option>
+                    <option value="Female">Female</option>
+                    <option value="Male">Male</option>
+                </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-lg-2 control-label">Hospital:</label>
+        <div class="col-lg-8">
+            <select class="form-control" name="hospitals" id="whospital"
+                    data-placeholder="Choose hospital"
+                    ng-options="hosp.name for hosp in hospitals"
+                    ng-model="ward.hospital" required>
+            </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-lg-2 control-label">Name:</label>
+        <div class="col-lg-8">
+          <input type="text" class="form-control" ng-model="ward.name" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-lg-8 col-lg-offset-2">
+          <button type="submit" class="btn btn-info w-xs" ng-disabled="newWard.$invalid" >Add</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+<!-- Beds -->
+  <div class="wrapper" ng-show="isItem('Beds')">
+    <form name="newBed" class="form-horizontal m-t-lg"  ng-submit="addBed()">
+
+      <div class="form-group">
+        <label class="col-lg-2 control-label">Type:</label>
+        <div class="col-lg-8">
+                <select class="form-control" data-placeholder="Choose bed type" 
+                    name="btype" id="type" ng-model="bed.type" required>
+                    <option value="Regular">Regular</option>
+                    <option value="Verandah">Verandah</option>
+                </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-lg-2 control-label">Hospital:</label>
+        <div class="col-lg-8">
+            <select class="form-control" name="hospitals" id="bhospital"
+                    data-placeholder="Choose hospital"
+                    ng-options="hosp.name for hosp in hospitals"
+                    ng-model="selectedHosp" required>
+            </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-lg-2 control-label">Ward:</label>
+        <div class="col-lg-8">
+               <select name="wards" id="ward"
+                        ng-options="ward.name for ward in selectedHosp.wards track by ward.id"
+                        ng-model="bed.ward" required>
+            </select>
+        </div>
+      </div>
+        
+      <div class="form-group">
+        <label class="col-lg-2 control-label">Name:</label>
+        <div class="col-lg-8">
+          <input type="text" class="form-control" ng-model="bed.name" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-lg-8 col-lg-offset-2">
+          <button type="submit" class="btn btn-info w-xs" ng-disabled="newBed.$invalid" >Add</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+
+<!-- Beds -->
+  <div class="wrapper" ng-show="isItem('Locations')">
+    <form name="newLocation" class="form-horizontal m-t-lg"  ng-submit="addLocation()">
+
+      <div class="form-group">
+        <label class="col-lg-2 control-label">Country:</label>
+        <div class="col-lg-8">
+          <input type="text" class="form-control" ng-model="loc.country" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-lg-2 control-label">Region:</label>
+        <div class="col-lg-8">
+          <input type="text" class="form-control" ng-model="loc.region" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-lg-8 col-lg-offset-2">
+          <button type="submit" class="btn btn-info w-xs" ng-disabled="newLocation.$invalid" >Add</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+<!-- Users -->
+  <div class="wrapper" ng-show="isItem('Users')">
+    <form name="newUser" class="form-horizontal m-t-lg"  ng-submit="addUser()">
+
+      <div class="form-group">
+        <label class="col-lg-2 control-label">Type:</label>
+        <div class="col-lg-8">
+                <select class="form-control" data-placeholder="Choose user type" name="htype" id="type" 
+                        ng-model="user.type">
+                      <option ng-repeat="r in types" value="{{r.id}}">{{r}}</option>
+                </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-lg-2 control-label">Region:</label>
+        <div class="col-lg-8">
+                <select class="form-control" name="regions" id="hregion"
+                        data-placeholder="Choose region"
+                        ng-model="user.location_id" required>
+                      <option value="0">All</option>
+                      <option ng-repeat="r in regions" value="{{r.id}}">{{r.region}}</option>
+                 </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-lg-2 control-label">Hospital:</label>
+        <div class="col-lg-8">
+            <select class="form-control" name="hospitals" id="uhospital"
+                    data-placeholder="Choose hospital"
+                    ng-model="user.hospital_id" required>
+                      <option value="0">All</option>
+                      <option ng-repeat="h in hospitals" value="{{h.id}}">{{h.name}}</option>
+            </select>
+        </div>
+      </div>
+        
+      <div class="form-group">
+        <label class="col-lg-2 control-label">Username:</label>
+        <div class="col-lg-8">
+          <input type="text" class="form-control" ng-model="user.username" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-lg-2 control-label">Name:</label>
+        <div class="col-lg-8">
+          <input type="text" class="form-control" ng-model="user.name" required>
+        </div>
+      </div>
+
+
+      <div class="form-group">
+        <label class="col-lg-2 control-label">Title:</label>
+        <div class="col-lg-8">
+          <input type="text" class="form-control" ng-model="user.title">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-lg-8 col-lg-offset-2">
+          <button type="submit" class="btn btn-info w-xs" ng-disabled="newUser.$invalid" >Add</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

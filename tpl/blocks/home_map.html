@@ -1,0 +1,86 @@
+
+<div ng-controller="MapCtrl">
+    <div class="bg-light lter b-b wrapper-md">
+    <div class="row">
+        <div class="col-sm-6 col-xs-12">
+            <h1 class="m-n font-thin h3">Home > Map</h1>
+            <small class="text-muted">Welcome to the Electronic Bed Management System</small>
+        </div>
+
+        <!--
+        <div class="col-sm-6 text-right hidden-xs">
+            <div class="inline m-r text-left">
+                <div class="m-b-xs"><span class="text-muted">Occupany Level</span></div>
+            </div>
+            <div class="inline m-r text-left">
+                <div id="statChart" ui-jq="easyPieChart" ui-options="statOptions">
+                    <div>
+                        <span class="step">{{ or }}</span>%
+                    </div>
+                </div>
+            </div>
+        </div>
+        -->
+    </div>
+</div>
+
+<!-- Map View -->
+<div class="wrapper-md">
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="panel b-a">
+                <div class="panel-heading">
+                    <span class="text-xs text-muted  pull-right v-middle">
+                        <i class="fa fa-circle text-default m-r-xs v-middle"></i>Hospitals: {{ hospitals }}
+                        <i class="fa fa-circle text-default m-r-xs m-l-sm v-middle"></i>Beds: {{ beds_totl }}
+                        <i class="fa fa-circle text-success m-r-xs m-l-sm v-middle"></i>Available: {{ beds_open }}
+                    </span>
+                </div>
+
+                <div class="panel-body">
+                    <div id="map_canvas" style="min-height:500px" ui-map="myMap" ui-options="mapOptions" ui-event="{'map-click': 'resetTree($event, $params)'}"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-8">
+           <div class="panel b-a text-center">
+                <div class="panel-heading b-b b-light">Hospital Map with available bed information</div>
+                <div class="panel-body">
+
+                        <div id="mytg-treeMap">
+                            <div treemap="tree"
+                                 origmap="orig"
+                                 name="formatName(name)"
+                                 detail="onDetail(node)"
+                                 colorLow="green"
+                                 colorMid="white"
+                                 colorHigh="yellow"></div>
+                        </div>
+
+                        <div ng-repeat="marker in myMarkers" ui-map-marker="myMarkers[$index]"
+                             ui-event="{'map-click': 'openMarkerInfo(marker)'}">
+                        </div>
+
+                        <div ui-map-info-window="myInfoWindow">
+                            <div class="m-b-sm font-bold">{{ currentMarker.title }}</div>
+                            <div>
+                                <div class="inline">
+                                    <p class="text-info font-bold">{{ currentMarker.beds_open }} of {{ currentMarker.beds_totl }} beds available</p>
+
+                                    <p class="m-b-xs" style="margin-top:15px">Occupancy: {{ currentMarker.or }}%</p>
+                                    <div class="progress progress-xs">
+                                        <div class="progress-bar {{ currentMarker.pbcolor }}" data-toggle="tooltip"
+                                             data-original-title="{{ currentMarker.or }}%"
+                                             style="width: {{ currentMarker.or }}%;"></div>
+                                    </div>
+                                    <p class="m-b-xs">Last Updated: {{ currentMarker.updated_at | fromNow }}</p>
+
+                                </div>
+                            </div>
+                        </div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

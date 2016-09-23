@@ -1,0 +1,306 @@
+<div ng-controller="AdminViewCtrl">
+  <!-- header -->
+  <div class="wrapper bg-light lter b-b">
+    <div class="btn-toolbar">
+      <div class="btn-group">
+          <a ui-sref="app.admin.add({item:'{{ item }}'})" 
+            class="btn btn-sm btn-success m-b-xs font-bold btn-addon">
+              <i class="fa fa-plus"></i>Add {{ item }}
+          </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Beds -->
+  <div class="wrapper-md" ng-show="isItem('Beds')">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                   Region: <select name="regions" id="bregion"
+                        ng-options="r.region for r in regions"
+                        ng-model="selectedRegion">
+                    </select>
+
+                <span style="margin-left: 10px">Hospital:</span> <select name="hospitals" id="hospital"
+                        ng-options="hosp.name for hosp in hospitals"
+                        ng-model="selectedHosp">
+                    </select>
+
+                <span style="margin-left: 10px">Ward:</span>   <select name="wards" id="ward"
+                        ng-options="ward.name for ward in selectedHosp.wards track by ward.id"
+                        ng-model="selectedWard">
+                    </select>
+
+                    <span class="text-xs text-muted ">
+                        <i class="fa fa-spinner fa-spin fa-2x v-middle" ng-show="showSpinner" ></i>
+                    </span>
+
+                    <span class="text-xs text-muted  pull-right v-middle">
+                        <i class="fa fa-circle text-primary m-r-xs v-middle"></i> {{ beds_totl }}
+                        <i class="fa fa-circle text-success m-r-xs m-l-sm v-middle"></i> {{ beds_open }}
+                        <i class="fa fa-circle text-danger m-r-xs m-l-sm v-middle"></i> {{ beds_totl - beds_open }}
+                    </span>
+                   <!--Search <input id="filter" type="text" class="form-control input-sm w-sm inline m-r"/>-->
+            </div>
+
+            <div class="table-responsive">
+                <table class="table m-b-none" ui-jq="footable" data-filter="#filter" data-page-size="20">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Hospital</th>
+                        <th>Ward</th>
+                        <th>Status</th>
+                        <th>Updated</th>
+                        <th data-sort-ignore="true">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="bed in beds">
+                        <td style="width:30px;">{{ bed.name }}</td>
+                        <td style="width:20px;">{{ bed.type }}</td>
+                        <td>{{ bed.ward.hospital.name }}</td>
+                        <td>{{ bed.ward.name }}</td>
+                        <td style="width:20px;">{{ bed.status }}</td>
+                        <td data-type="numeric" data-value="{{ bed.updated_at | unixTime }}">{{ bed.updated_at | fromNow }}</td>
+                        <td>
+                            <div class="btn-group m-r-sm">
+                                <button style="margin-left: 20px" class="btn btn-sm btn-default w-xxs w-auto-xs" tooltip="Delete"
+                                        ng-really-message="Are you sure you want to delete this bed? Clicking OK, will delete the bed forever..."
+                                        ng-really-click="deleteBed({{ bed }})"><i class="fa fa-trash-o"></i> Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tfoot class="hide-if-no-paging">
+                    <tr>
+                        <td colspan="4" class="text-center"><ul class="pagination"></ul></td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+  <!-- wards -->
+  <div class="wrapper-md" ng-show="isItem('Wards')">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                   Region: <select name="regions" id="wregion"
+                        ng-options="r.region for r in regions"
+                        ng-model="selectedRegion">
+                    </select>
+
+                    <span style="margin-left: 10px">Hospital:</span> 
+                    <select name="hospitals" id="whospital"
+                        ng-options="hosp.name for hosp in hospitals"
+                        ng-model="selectedHosp">
+                    </select>
+
+                    <span class="text-xs text-muted ">
+                        <i class="fa fa-spinner fa-spin fa-2x v-middle" ng-show="showSpinner" ></i>
+                    </span>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table m-b-none" ui-jq="footable" data-filter="#filter" data-page-size="20">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Updated</th>
+                        <th data-sort-ignore="true">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="ward in selectedHosp.wards">
+                        <td style="width:30px;">{{ ward.name }}</td>
+                        <td style="width:20px;">{{ ward.type }}</td>
+                        <td data-type="numeric" data-value="{{ ward.updated_at | unixTime }}">{{ ward.updated_at | fromNow }}</td>
+                        <td>
+                            <div class="btn-group m-r-sm">
+                                <button style="margin-left: 20px" class="btn btn-sm btn-default w-xxs w-auto-xs" tooltip="Delete"
+                                        ng-really-message="Are you sure you want to delete this ward? Clicking OK, will delete the ward forever..."
+                                        ng-really-click="deleteWard({{ ward }})"><i class="fa fa-trash-o"></i> Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tfoot class="hide-if-no-paging">
+                    <tr>
+                        <td colspan="4" class="text-center"><ul class="pagination"></ul></td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+  <!-- Hospitals -->
+  <div class="wrapper-md" ng-show="isItem('Hospitals')">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+
+                Region: <select name="regions" id="region"
+                        ng-options="r.region for r in regions"
+                        ng-model="selectedRegion">
+                </select>
+
+                <span class="text-xs text-muted ">
+                    <i class="fa fa-spinner fa-spin fa-2x v-middle" ng-show="showSpinner" ></i>
+                </span>
+
+            </div>
+
+            <div class="table-responsive">
+                <table class="table m-b-none" ui-jq="footable" data-filter="#filter" data-page-size="20">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Latitude</th>
+                        <th>Longitude</th>
+                        <th>Updated</th>
+                        <th data-sort-ignore="true">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="hosp in hospitals">
+                        <td>{{ hosp.name }}</td>
+                        <td>{{ hosp.type }}</td>
+                        <td>{{ hosp.lat }}</td>
+                        <td>{{ hosp.long }}</td>
+                        <td data-type="numeric" data-value="{{ hosp.updated_at | unixTime }}">{{ hosp.updated_at | fromNow }}</td>
+                        <td>
+                            <div class="btn-group m-r-sm">
+                                <button style="margin-left: 20px" class="btn btn-sm btn-default w-xxs w-auto-xs" tooltip="Delete"
+                                        ng-really-message="Are you sure you want to delete this hospital? Clicking OK, will delete the hospital forever..."
+                                        ng-really-click="deleteHospital({{ hosp }})"><i class="fa fa-trash-o"></i> Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tfoot class="hide-if-no-paging">
+                    <tr>
+                        <td colspan="4" class="text-center"><ul class="pagination"></ul></td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+  <!-- Locations -->
+  <div class="wrapper-md" ng-show="isItem('Locations')">
+      <div class="panel panel-default">
+          <div class="panel-heading">
+
+              Region: <select name="regions" id="lregion"
+                      ng-options="r for r in regions"
+                      ng-model="selectedRegion">
+              </select>
+
+                <span class="text-xs text-muted ">
+                    <i class="fa fa-spinner fa-spin fa-2x v-middle" ng-show="showSpinner" ></i>
+                </span>
+
+          </div>
+
+          <div class="table-responsive">
+              <table class="table m-b-none" ui-jq="footable" data-filter="#filter" data-page-size="20">
+                  <thead>
+                  <tr>
+                      <th>Country</th>
+                      <th>Region</th>
+                      <th>District</th>
+                      <th>Updated</th>
+                      <th data-sort-ignore="true">Action</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr ng-repeat="l in locations | filter: lfilter">
+                      <td>{{ l.country }}</td>
+                      <td>{{ l.region }}</td>
+                      <td>{{ l.district }}</td>
+                      <td data-type="numeric" data-value="{{ hosp.updated_at | unixTime }}">{{ hosp.updated_at | fromNow }}</td>
+                      <td>
+                          <div class="btn-group m-r-sm">
+                              <button style="margin-left: 20px" class="btn btn-sm btn-default w-xxs w-auto-xs" tooltip="Delete"
+                                      ng-really-message="Are you sure you want to delete this location? Clicking OK, will delete the location forever..."
+                                      ng-really-click="deleteLocation({{ l }})"><i class="fa fa-trash-o"></i> Delete</button>
+                          </div>
+                      </td>
+                  </tr>
+                  </tbody>
+                  <tfoot class="hide-if-no-paging">
+                  <tr>
+                      <td colspan="4" class="text-center"><ul class="pagination"></ul></td>
+                  </tr>
+                  </tfoot>
+              </table>
+          </div>
+      </div>
+  </div>
+
+  <!-- users -->
+  <div class="wrapper-md" ng-show="isItem('Users')">
+      <div class="panel panel-default">
+          <div class="panel-heading">
+
+              Region: <select name="regions" id="uregion"
+                      ng-options="r.region for r in regions"
+                      ng-model="selectedRegion">
+              </select>
+
+              <span style="margin-left: 10px">Hospital:</span> <select name="hospitals" id="uhospital"
+                      ng-options="hosp.name for hosp in hospitals"
+                      ng-model="selectedHosp">
+              </select>
+
+                <span class="text-xs text-muted ">
+                    <i class="fa fa-spinner fa-spin fa-2x v-middle" ng-show="showSpinner" ></i>
+                </span>
+          </div>
+
+          <div class="table-responsive">
+              <table class="table m-b-none" ui-jq="footable" data-filter="#filter" data-page-size="20">
+                  <thead>
+                  <tr>
+                      <th>Name</th>
+                      <th>Title</th>
+                      <th>Region</th>
+                      <th>Hospital</th>
+                      <th>Type</th>
+                      <th>Updated</th>
+                      <th data-sort-ignore="true">Action</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr ng-repeat="u in users | filter: ufilter">
+                      <td>{{ u.name }}</td>
+                      <td>{{ u.title }}</td>
+                      <td>{{ (u.hospital==null) ? 'All' : u.hospital.name }}</td>
+                      <td>{{ (u.hospital==null) ? 'All' : u.hospital.name }}</td>
+                      <td>{{ u.type }}</td>
+                      <td data-type="numeric" data-value="{{ u.updated_at | unixTime }}">{{ u.updated_at | fromNow }}</td>
+                      <td>
+                          <div class="btn-group m-r-sm">
+                              <button style="margin-left: 20px" class="btn btn-sm btn-default w-xxs w-auto-xs" tooltip="Delete"
+                                      ng-really-message="Are you sure you want to delete this user? Clicking OK, will delete the user forever..."
+                                      ng-really-click="deleteUser({{ u }})"><i class="fa fa-trash-o"></i> Delete</button>
+                          </div>
+                      </td>
+                  </tr>
+                  </tbody>
+                  <tfoot class="hide-if-no-paging">
+                  <tr>
+                      <td colspan="4" class="text-center"><ul class="pagination"></ul></td>
+                  </tr>
+                  </tfoot>
+              </table>
+          </div>
+      </div>
+  </div>
+
+</div>

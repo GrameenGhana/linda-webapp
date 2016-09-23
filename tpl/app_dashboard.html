@@ -1,0 +1,182 @@
+<div class="hbox hbox-auto-xs hbox-auto-sm"
+     ng-controller="DashboardCtrl"
+     ng-init=" app.settings.asideFolded = false; app.settings.asideDock = true;">
+
+  <!-- main -->
+  <div class="col">
+
+      <!-- main header -->
+      <div class="bg-light lter b-b wrapper-md">
+        <div class="row">
+            <div class="col-sm-6 col-xs-12">
+                <h1 class="m-n font-thin h3 text-black">Dashboard</h1>
+                <small class="text-muted">Welcome to the Electronic Bed Management System</small>
+            </div>
+        </div>
+      </div>
+      <!-- / main header -->
+
+
+      <!--/ summary stats
+      <div class="wrapper-md bg-white-only b-b">
+        <div class="row text-center">
+          <div class="col-sm-3 col-xs-6">
+              <div>Hospitals</div>
+              <div class="h2 m-b-sm">219k</div>
+          </div>
+
+          <div class="col-sm-3 col-xs-6">
+              <div>Beds</i></div>
+              <div class="h2 m-b-sm">1230</div>
+          </div>
+
+          <div class="col-sm-3 col-xs-6">
+              <div>Current Occupancy Rate</i></div>
+              <div class="h2 m-b-sm">25%</div>
+          </div>
+
+          <div class="col-sm-3 col-xs-6">
+              <div>Avg. Daily Occupancy rate <i class="fa fa-fw fa-caret-down text-danger text-sm"></i></div>
+              <div class="h2 m-b-sm">2,300</div>
+          </div>
+        </div>
+      </div>
+        summary stats -->
+
+      <div class="bg-black dker wrapper-lg">
+         <ul class="nav nav-pills nav-xxs nav-rounded m-b-lg">
+           <li id="ado" class="np active"><a href ng-click="refreshSplineData('ado')">Avg. % Daily Occupancy</a></li>
+           <li id="pbo" class="np"><a href ng-click="refreshSplineData('pbo')">Avg. % Bed Occupancy</a></li>
+           <li id="dr" class="np"><a href ng-click="refreshSplineData('dr')">Avg. % Death Rate</a></li>
+           <li class="pull-right">
+             <span class="v-middle">Region:</span>
+             <select class="input-sm form-control w-sm inline v-middle" name="regions"
+                             ng-options="r.region for r in regions"
+                             ng-model="bregion">
+             </select>
+
+             <span style="margin-left: 10px" class="v-middle">Hospital:</span>
+             <select class="input-sm form-control w-sm inline v-middle"
+                            ng-options="hosp.name for hosp in hospitals"
+                     ng-model="bhospital">
+               </select>
+
+             <span style="margin-left: 10px" class="v-middle">Year:</span>
+             <select class="input-sm form-control w-sm inline v-middle" ng-model="byear">
+                 <option ng-repeat="y in years" value="{{y}}">{{ y }}</option>
+             </select>
+           </li>
+         </ul>
+         <div ui-jq="plot" ui-refresh="spline" ui-options="
+         [
+           { data: {{spline}}, points: { show: true, radius: 2}, splines: { show: true, tension: 0.4, lineWidth: 1 } }
+         ],
+         {
+           colors: ['{{app.color.info}}', '{{app.color.primary}}'],
+           series: { shadowSize: 3 },
+           xaxis:{ font: { color: '#507b9b' },
+                  ticks: [ [ 1, 'Jan' ], [ 2, 'Feb' ],  [ 3, 'Mar' ],  [ 4, 'Apr' ],
+                           [ 5, 'May' ], [ 6, 'Jun' ],  [ 7, 'Jul' ],  [ 8, 'Aug' ],
+                           [ 9, 'Sep' ], [ 10, 'Oct' ], [ 11, 'Nov' ], [ 12, 'Dec' ]
+                         ]
+          },
+           yaxis:{ font: { color: '#507b9b' } },
+           grid: { hoverable: true, clickable: true, borderWidth: 0, color: '#1c2b36' },
+           tooltip: true,
+           tooltipOpts: { content: '%y.2',  defaultTheme: false, shifts: { x: 10, y: -25 } }
+         }
+       " style="min-height:360px" >
+         </div>
+      </div>
+
+      <div class="wrapper-md">
+            <!-- export table -->
+            <div class="wrapper-lg">
+              <div class="panel panel-default">
+                  <div class="panel-heading">
+                      Bed Utilization Report
+                  </div>
+                  <div class="row wrapper">
+                      <div class="col-sm-10 m-b-xs">
+                          <span class="v-middle">Region:</span>
+
+                          <select class="input-sm form-control w-sm inline v-middle" name="regions" id="region"
+                                          ng-options="r.region for r in regions"
+                                          ng-model="region">
+                          </select>
+
+                          <span style="margin-left: 10px" class="v-middle">Hospital:</span>
+
+                          <select class="input-sm form-control w-sm inline v-middle" name="hospitals" id="hospital"
+                                  ng-options="hosp.name for hosp in hospitals"
+                                  ng-model="hospital">
+                            </select>
+
+                          <span style="margin-left: 10px" class="v-middle">Month:</span>
+
+                          <select class="input-sm form-control w-sm inline v-middle" ng-model="month">
+                              <option ng-repeat="m in months" value="{{m}}">{{ m }}</option>
+                          </select>
+
+                          <span style="margin-left: 10px" class="v-middle">Year:</span>
+
+                          <select class="input-sm form-control w-sm inline v-middle" ng-model="year">
+                              <option ng-repeat="y in years" value="{{y}}">{{ y }}</option>
+                          </select>
+                      </div>
+
+                      <div class="col-sm-2 m-b-xs">
+                          <div class="input-group pull-right">
+                              <span class="input-group-btn">
+                                <a id="report-export" class="btn btn-sm btn-info"><i class="fa fa-upload"></i> Export</a>
+                              </span>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="table-responsive">
+                      <table id="report-table" class="table table-striped b-t b-light">
+                          <thead>
+                          <tr>
+                              <th>Hospital</th>
+                              <th>Ward</th>
+                              <th>Number of days</th>
+                              <th>Bed Compliment</th>
+                              <th>Admissions</th>
+                              <th>Discharges</th>
+                              <th>Deaths</th>
+                              <th>Patient Days</th>
+                              <th>Available Bed Days</th>
+                              <th>Death Rate</th>
+                              <th>ALOS</th>
+                              <th>TOI</th>
+                              <th>Av. Daily Occup.</th>
+                              <th>% Bed Occupancy</th>
+                              <th>Turn over per bed</th>
+                          </tr>
+                          </thead>
+                          <tbody id="table-body">
+                          <tr>
+                              <td>Sample</td>
+                              <td>Sample</td>
+                              <td>Sample</td>
+                              <td>Sample</td>
+                              <td>Sample</td>
+                              <td>Sample</td>
+                              <td>Sample</td>
+                              <td>Sample</td>
+                              <td>Sample</td>
+                              <td>Sample</td>
+                              <td>Sample</td>
+                              <td>Sample</td>
+                              <td>Sample</td>
+                          </tr>
+                          </tbody>
+                      </table>
+                  </div>
+                  <footer class="panel-footer">
+                  </footer>
+              </div>
+            </div>
+      </div>
+  </div>
+</div>

@@ -1,0 +1,12 @@
+<div class="hbox hbox-auto-xs hbox-auto-sm" 
+   ng-controller="AuthFormController"
+   ng-init="app.settings.asideFolded=true;app.settings.asideDock=false;init()">
+
+  <div class="col">
+    <div class="wrapper-md">
+      <script type="text/ng-template" id="AuthModalContent.html">
+          <div ng-include="'tpl/access_auth_modal.html'"></div>
+      </script>
+    </div>
+  </div>
+</div>

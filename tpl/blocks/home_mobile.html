@@ -1,0 +1,86 @@
+<!-- main -->
+  <div class="col"  ng-controller="MobileCtrl">
+
+      <div class="bg-light lter b-b wrapper-md">
+          <h1 class="m-n font-thin h3">Home > {{ hospital.name }}</h1>
+          <small class="text-muted">Welcome to the Electronic Bed Management System</small>
+      </div>
+
+  <div class="wrapper-md bg-white-only b-b">
+      <div class="row text-center">
+          <div class="col-sm-4 col-xs-4">
+              <div>Total Beds</div>
+              <div class="h2 m-b-sm text-primary">{{ beds_totl }}</div>
+          </div>
+
+          <div class="col-sm-4 col-xs-4">
+              <div>Free Beds</i></div>
+              <div class="h2 m-b-sm text-success">{{ beds_open }}</div>
+          </div>
+
+          <div class="col-sm-4 col-xs-4">
+              <div>Current Occupancy Rate</i></div>
+              <div class="h2 m-b-sm text-warning">{{ or }}%</div>
+          </div>
+      </div>
+  </div>
+
+    <div class="wrapper-md">
+          <div class="panel no-border">
+            <div class="panel-heading wrapper b-b b-light">
+                <div class="panel-heading">
+                    Search <input id="filter" type="text" class="form-control input-sm w-sm inline m-r"/>
+
+                    <span class="text-xs text-muted pull-right">
+                        <i class="fa fa-circle text-primary m-r-xs"></i> {{ beds_totl }}
+                        <i class="fa fa-circle text-success m-r-xs m-l-sm"></i> {{ beds_open }}
+                        <i class="fa fa-circle text-danger m-r-xs m-l-sm"></i> {{ beds_totl - beds_open }}
+                    </span>
+                </div>
+            </div>
+              <div class="table-responsive">
+                  <table class="table m-b-none" ui-jq="footable" data-filter="#filter" data-page-size="20">
+                      <thead>
+                      <tr>
+                          <th>Name</th>
+                          <th>Type</th>
+                          <th>Location</th>
+                          <th data-sort-ignore="true">Action</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <tr ng-repeat="bed in beds">
+                          <td style="width:30px;">{{ bed.name }}</td>
+                          <td style="width:20px;">{{ bed.type }}</td>
+                          <td>{{ wardName(bed.ward_id) }}</td>
+                          <td>
+                              <div class="btn-group m-r-sm">
+                                  <button class="btn btn-success btn-sm" ng-class="{'btn-danger active' : bed.status!='Available'}"
+                                          ng-click="changeBedStatus({{ bed.id }})"
+                                          ui-toggle-class="btn-danger">
+                                      <i class="fa fa-check text"></i>
+                                      <span class="text">Available</span>
+
+                                      <i class="fa fa-times text-active"></i>
+                                      <span class="text-active">Occupied</span>
+                                  </button>
+                              </div>
+                          </td>
+                      </tr>
+                      </tbody>
+                      <tfoot class="hide-if-no-paging">
+                      <tr>
+                          <td colspan="4" class="text-center"><ul class="pagination"></ul></td>
+                      </tr>
+                      </tfoot>
+                  </table>
+              </div>
+
+          </div>
+        </div>
+      </div>
+      <!-- / users -->
+
+  <!-- / main -->
+
+</div>
