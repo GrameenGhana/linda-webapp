@@ -67,6 +67,20 @@ class HospitalController extends BaseController {
         }
     }
 
+    public function updateStatus($status, $id) 
+    {
+        $item = Hospital::find($id);
+
+        if ($item !=null) {
+            $item->active = ($status=='enable') ? 1 : 0;
+            $item->save();
+            return Response::json(array('error' => false, 'message' => 'Updated', 'params' => array('id' => $id), 'hospital' => $item), 200);
+        } else {
+            return Response::json(array('error' => true, 'message' => 'Hospital not found',
+                                        'params' => array('id' => $id)), 200);
+        }
+    }
+
     public function getByUser()
     {
         $userid = Input::get('userid',null);

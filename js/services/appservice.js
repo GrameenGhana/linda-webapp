@@ -34,6 +34,8 @@ angular.module('app')
     appService.getHospitalsForTree = function() { return WebService.get('hospital/tree'); }
     appService.addHospital = function(data) { return WebService.post('hospital', data); };
     appService.deleteHospital = function(id) { return WebService.delete('hospital/'+id); };
+    appService.enableHospital = function(id) { return WebService.get('hospital/status/enable/'+id); };
+    appService.disableHospital = function(id) { return WebService.get('hospital/status/disable/'+id); };
 
     // Locations
     appService.getLocations = function() { return WebService.get('location'); }
