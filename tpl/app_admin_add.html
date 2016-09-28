@@ -200,9 +200,8 @@
       <div class="form-group">
         <label class="col-lg-2 control-label">Type:</label>
         <div class="col-lg-8">
-                <select class="form-control" data-placeholder="Choose user type" name="htype" id="type" 
-                        ng-model="user.type">
-                      <option ng-repeat="r in types" value="{{r.id}}">{{r}}</option>
+                <select class="form-control" data-placeholder="Choose user type" name="utype" id="utype" ng-model="user.type" required>
+                      <option ng-repeat="r in types" value="{{r}}">{{r}}</option>
                 </select>
         </div>
       </div>
@@ -210,11 +209,11 @@
       <div class="form-group">
         <label class="col-lg-2 control-label">Region:</label>
         <div class="col-lg-8">
-                <select class="form-control" name="regions" id="hregion"
+                <select class="form-control" name="regions" id="uregion"
                         data-placeholder="Choose region"
                         ng-model="user.location_id" required>
                       <option value="0">All</option>
-                      <option ng-repeat="r in regions" value="{{r.id}}">{{r.region}}</option>
+                      <option ng-repeat="r in regions" value="{{r.region}}">{{r.region}}</option>
                  </select>
         </div>
       </div>
@@ -234,7 +233,14 @@
       <div class="form-group">
         <label class="col-lg-2 control-label">Username:</label>
         <div class="col-lg-8">
-          <input type="text" class="form-control" ng-model="user.username" required>
+          <input type="text" class="form-control" ng-model="user.email" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-lg-2 control-label">Password:</label>
+        <div class="col-lg-8">
+          <input type="password" class="form-control" ng-model="user.password" required>
         </div>
       </div>
 

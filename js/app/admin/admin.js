@@ -324,7 +324,7 @@ app.controller('AdminAddCtrl', ['$scope', '$stateParams', 'toaster', 'AppService
     };
 
     var handleSuccess = function(response) {
-        toaster('info','Success',$scope.item+' added');
+        //toaster('info','Success',$scope.item+' added');
         $scope.err_msg = '';
         $scope.error = false;
         angular.element('#back_button').triggerHandler('click')

@@ -282,6 +282,7 @@
                   <thead>
                   <tr>
                       <th>Name</th>
+                      <th>Username</th>
                       <th>Title</th>
                       <th>Region</th>
                       <th>Hospital</th>
@@ -293,6 +294,7 @@
                   <tbody>
                   <tr ng-repeat="u in users | filter: ufilter">
                       <td>{{ u.name }}</td>
+                      <td>{{ u.email }}</td>
                       <td>{{ u.title }}</td>
                       <td>{{ (u.hospital==null) ? 'All' : u.hospital.name }}</td>
                       <td>{{ (u.hospital==null) ? 'All' : u.hospital.name }}</td>

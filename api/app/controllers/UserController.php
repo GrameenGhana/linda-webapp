@@ -33,7 +33,8 @@ class UserController extends \BaseController {
                 $h->name = $data['name'];
                 $h->title = $data['title'];
                 $h->type = $data['type'];
-                $h->email = $data['username'];
+                $h->email = $data['email'];
+                $h->password = Hash::make(md5($data['password']));
                 $h->location_id = ($data['location_id']==0) ? null: $data['location_id'];
                 $h->hospital_id = ($data['hospital_id']==0) ? null: $data['hospital_id'];
                 $h->active = 1;
