@@ -25,7 +25,7 @@ angular.module('app')
                       }
                   } else {
                       // user is not logged in
-                      window.location = 'http://chnonthego.org/linda/access/signin';
+                      window.location = 'http://localhost/linda/access/signin';
                   }
               } else {
                   if (next.url == '/signin' || next.url=='/home')

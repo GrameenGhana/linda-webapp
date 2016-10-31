@@ -29,13 +29,12 @@ class WardController extends BaseController {
         } else {
             $data = Input::get('data',null);
             if ($data != null) {
-                $h = new Ward();
-                $h->name = $data['name'];
-                $h->type = $data['type'];
-                $h->hospital_id = $data['hospital'];
-                $h->modified_by = Input::get('user_id',1); 
-                $h->created_at = date('Y-m-d h:m:s');
-                $h->save();
+                $w = new Ward();
+                $w->name = $data['name'];
+                $w->hospital_id = $data['hospital'];
+                $w->modified_by = Input::get('user_id',1); 
+                $w->created_at = date('Y-m-d h:m:s');
+                $w->save();
             } else {
                 $error = true;
                 $responseCode = 400;

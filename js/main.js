@@ -14,7 +14,7 @@ angular.module('app')
       $scope.app = {
         name: 'Linda',
         version: '1.0.0',
-        base_url: 'http://chnonthego.org/linda/',
+        base_url: 'http://localhost/linda/',
         // for chart colors
         color: {
           primary: '#7266ba',
