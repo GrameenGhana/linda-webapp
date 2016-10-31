@@ -144,6 +144,27 @@ app.controller('AdminViewCtrl', ['$scope',  '$stateParams', 'toaster', 'AppServi
         $scope.selectedRegion = {};
         $scope.showSpinner = true;
 
+        $scope.enableHospital = function(hospital) {
+            return AppService.enableHospital(hospital.id).then(function(res) {
+                if (res.error) {
+                    toaster.pop('error', 'Error', res.message);
+                } else {
+                    $('#enable-'+hospital.id).hide();
+                    $('#disable-'+hospital.id).show();
+                }
+            });
+        };
+        $scope.disableHospital = function(hospital) {
+            return AppService.disableHospital(hospital.id).then(function(res) {
+                if (res.error) {
+                    toaster.pop('error', 'Error', res.message);
+                } else {
+                    $('#disable-'+hospital.id).hide();
+                    $('#enable-'+hospital.id).show();
+                } 
+            });
+        };
+
         $scope.deleteHospital = function(hospital) {
             return AppService.deleteHospital(hospital.id).then(function(res) {
                 if (res.error) {
@@ -303,7 +324,7 @@ app.controller('AdminAddCtrl', ['$scope', '$stateParams', 'toaster', 'AppService
     };
 
     var handleSuccess = function(response) {
-        toaster('info','Success',$scope.item+' added');
+        //toaster('info','Success',$scope.item+' added');
         $scope.err_msg = '';
         $scope.error = false;
         angular.element('#back_button').triggerHandler('click')

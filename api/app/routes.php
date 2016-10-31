@@ -35,6 +35,7 @@ Route::group(array('prefix'=>'/v1'), function() {
     Route::get('hospital/tree',       'HospitalController@treeInfo');
     Route::get('hospital/byuser',      'HospitalController@getByUser');
     Route::get('hospital/bylocation',  'HospitalController@getByLocation');
+    Route::get('hospital/status/{status}/{wid}', 'HospitalController@updateStatus');
     Route::resource('hospital',        'HospitalController');
 
     Route::resource('ward',       'WardController');
